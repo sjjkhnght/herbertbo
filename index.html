@@ -1,722 +1,822 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Green Network - Protect Earth</title>
+    <title>万年历 - 日期查询工具</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
         }
 
         :root {
-            --primary: #2e7d32;
-            --secondary: #4caf50;
-            --accent: #8bc34a;
-            --light: #e8f5e9;
-            --dark: #1b5e20;
-            --text: #333333;
-            --white: #ffffff;
+            --primary-color: #4a6fa5;
+            --secondary-color: #6d9dc5;
+            --accent-color: #ff7e5f;
+            --light-color: #f8f9fa;
+            --dark-color: #343a40;
+            --text-color: #333;
+            --text-light: #6c757d;
+            --border-color: #dee2e6;
+            --shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
         }
 
         body {
-            background-color: var(--light);
-            color: var(--text);
+            background-color: #f5f7fa;
+            color: var(--text-color);
             line-height: 1.6;
-        }
-
-        header {
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            color: var(--white);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            min-height: 100vh;
         }
 
         .container {
-            width: 90%;
             max-width: 1200px;
             margin: 0 auto;
         }
 
-        .nav-container {
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+        }
+
+        h1 {
+            color: var(--primary-color);
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+
+        h1:after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(to right, transparent, var(--accent-color), transparent);
+            bottom: -10px;
+            left: 0;
+        }
+
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.2rem;
+            margin-top: 15px;
+        }
+
+        .main-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .calendar-container {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            padding: 25px;
+        }
+
+        .calendar-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 10px;
+        .current-date {
             font-size: 1.8rem;
             font-weight: 700;
+            color: var(--primary-color);
         }
 
-        .logo i {
-            font-size: 2rem;
-        }
-
-        nav ul {
+        .nav-buttons {
             display: flex;
-            list-style: none;
+            gap: 10px;
         }
 
-        nav ul li {
-            margin-left: 2rem;
-        }
-
-        nav ul li a {
-            color: var(--white);
-            text-decoration: none;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            padding: 0.5rem 0;
-            position: relative;
-        }
-
-        nav ul li a:hover {
-            color: var(--accent);
-        }
-
-        nav ul li a::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background-color: var(--accent);
-            transition: width 0.3s ease;
-        }
-
-        nav ul li a:hover::after {
-            width: 100%;
-        }
-
-        .hero {
-            background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.4)), url('https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2073&q=80');
-            background-size: cover;
-            background-position: center;
-            height: 80vh;
-            display: flex;
-            align-items: center;
-            text-align: center;
-            color: var(--white);
-        }
-
-        .hero-content {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .hero h1 {
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        .hero p {
-            font-size: 1.3rem;
-            margin-bottom: 2rem;
-        }
-
-        .btn {
-            display: inline-block;
-            background-color: var(--accent);
-            color: var(--white);
-            padding: 0.8rem 2rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.3s ease;
+        .nav-btn {
+            background-color: var(--light-color);
             border: none;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        .btn:hover {
-            background-color: var(--primary);
-            transform: translateY(-3px);
-            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        section {
-            padding: 5rem 0;
-        }
-
-        .section-title {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        .section-title h2 {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            position: relative;
-            display: inline-block;
-        }
-
-        .section-title h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 4px;
-            background-color: var(--accent);
-            border-radius: 2px;
-        }
-
-        .section-title p {
-            color: var(--text);
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .about-content {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
             align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            transition: var(--transition);
         }
 
-        .about-img {
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-        }
-
-        .about-img img {
-            width: 100%;
-            height: auto;
-            display: block;
-            transition: transform 0.5s ease;
-        }
-
-        .about-img:hover img {
+        .nav-btn:hover {
+            background-color: var(--primary-color);
+            color: white;
             transform: scale(1.05);
         }
 
-        .about-text h3 {
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            color: var(--dark);
-        }
-
-        .about-text p {
-            margin-bottom: 1.5rem;
-        }
-
-        .stats {
+        .weekdays {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-
-        .stat-item {
+            grid-template-columns: repeat(7, 1fr);
             text-align: center;
-            padding: 2rem 1rem;
-            background-color: var(--white);
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 10px;
         }
 
-        .stat-item:hover {
-            transform: translateY(-10px);
+        .weekdays div {
+            padding: 12px 0;
         }
 
-        .stat-item i {
-            font-size: 2.5rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-
-        .stat-item h3 {
-            font-size: 2.5rem;
-            color: var(--dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .stat-item p {
-            color: var(--text);
-        }
-
-        .initiatives {
-            background-color: var(--white);
-        }
-
-        .initiatives-grid {
+        .days {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2rem;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
         }
 
-        .initiative-card {
-            background-color: var(--light);
-            border-radius: 10px;
+        .day {
+            height: 70px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            padding-top: 10px;
+        }
+
+        .day:hover {
+            background-color: #e9ecef;
+            transform: translateY(-3px);
+        }
+
+        .day.today {
+            background-color: var(--accent-color);
+            color: white;
+            font-weight: bold;
+        }
+
+        .day.other-month {
+            color: #adb5bd;
+            background-color: #f1f3f4;
+        }
+
+        .day.holiday {
+            color: #e63946;
+        }
+
+        .day-number {
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .day-name {
+            font-size: 0.7rem;
+            margin-top: 3px;
+            opacity: 0.8;
+        }
+
+        .holiday-indicator {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 6px;
+            height: 6px;
+            background-color: #e63946;
+            border-radius: 50%;
+        }
+
+        .info-panel {
+            flex: 1;
+            min-width: 300px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
-            transition: transform 0.3s ease;
+            padding: 25px;
         }
 
-        .initiative-card:hover {
-            transform: translateY(-10px);
+        .info-header {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
         }
 
-        .initiative-img {
-            height: 200px;
-            overflow: hidden;
+        .selected-date-info {
+            margin-bottom: 30px;
         }
 
-        .initiative-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
+        .date-display {
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 10px;
         }
 
-        .initiative-card:hover .initiative-img img {
+        .date-details {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+        .date-details div {
+            margin-bottom: 8px;
+        }
+
+        .highlight {
+            color: var(--accent-color);
+            font-weight: 600;
+        }
+
+        .holiday-list {
+            margin-top: 25px;
+        }
+
+        .holiday-item {
+            padding: 12px 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            transition: var(--transition);
+        }
+
+        .holiday-item:hover {
+            background-color: #e9ecef;
+        }
+
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            padding: 25px;
+            margin-top: 20px;
+        }
+
+        .control-group {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .control-title {
+            font-size: 1.2rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .theme-selector {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .theme-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 3px solid transparent;
+        }
+
+        .theme-option:hover {
             transform: scale(1.1);
         }
 
-        .initiative-content {
-            padding: 1.5rem;
+        .theme-option.active {
+            border-color: var(--dark-color);
         }
 
-        .initiative-content h3 {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--dark);
+        .theme-blue {
+            background: linear-gradient(135deg, #4a6fa5, #6d9dc5);
         }
 
-        .initiative-content p {
-            margin-bottom: 1.5rem;
+        .theme-green {
+            background: linear-gradient(135deg, #2a9d8f, #8ab17d);
         }
 
-        .cta {
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            color: var(--white);
-            text-align: center;
-            padding: 5rem 0;
+        .theme-purple {
+            background: linear-gradient(135deg, #6a4c93, #9d4edd);
         }
 
-        .cta h2 {
-            font-size: 2.5rem;
-            margin-bottom: 1.5rem;
+        .theme-dark {
+            background: linear-gradient(135deg, #343a40, #495057);
         }
 
-        .cta p {
-            font-size: 1.2rem;
-            margin-bottom: 2rem;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
+        .jump-to-date {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
         }
 
-        .cta .btn {
-            background-color: var(--white);
-            color: var(--primary);
+        .jump-to-date select, .jump-to-date button {
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
         }
 
-        .cta .btn:hover {
-            background-color: var(--accent);
-            color: var(--white);
+        .jump-to-date button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .jump-to-date button:hover {
+            background-color: var(--secondary-color);
         }
 
         footer {
-            background-color: var(--dark);
-            color: var(--white);
-            padding: 3rem 0 1rem;
-        }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 2rem;
-            margin-bottom: 2rem;
-        }
-
-        .footer-column h3 {
-            font-size: 1.3rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-            padding-bottom: 10px;
-        }
-
-        .footer-column h3::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 40px;
-            height: 2px;
-            background-color: var(--accent);
-        }
-
-        .footer-column p {
-            margin-bottom: 1rem;
-        }
-
-        .footer-links {
-            list-style: none;
-        }
-
-        .footer-links li {
-            margin-bottom: 0.8rem;
-        }
-
-        .footer-links li a {
-            color: var(--light);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .footer-links li a:hover {
-            color: var(--accent);
-            padding-left: 5px;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .social-links a {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            background-color: rgba(255, 255, 255, 0.1);
-            border-radius: 50%;
-            color: var(--white);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .social-links a:hover {
-            background-color: var(--accent);
-            transform: translateY(-5px);
-        }
-
-        .copyright {
             text-align: center;
-            padding-top: 2rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 40px;
+            color: var(--text-light);
+            padding: 20px;
+            font-size: 0.9rem;
         }
 
-        .mobile-menu {
-            display: none;
-            font-size: 1.5rem;
+        .today-btn {
+            padding: 10px 20px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
             cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+            margin-left: 10px;
         }
 
-        @media (max-width: 992px) {
-            .about-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .initiatives-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .footer-content {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
+        .today-btn:hover {
+            background-color: #ff6b47;
+            transform: translateY(-2px);
         }
 
         @media (max-width: 768px) {
-            .hero h1 {
-                font-size: 2.5rem;
-            }
-            
-            .hero p {
-                font-size: 1.1rem;
-            }
-            
-            nav ul {
-                display: none;
-                position: absolute;
-                top: 100%;
-                left: 0;
-                width: 100%;
-                background-color: var(--primary);
+            .main-content {
                 flex-direction: column;
-                padding: 1rem 0;
-                text-align: center;
-                box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
             }
             
-            nav ul.active {
-                display: flex;
+            .calendar-container, .info-panel {
+                width: 100%;
             }
             
-            nav ul li {
-                margin: 0;
-                padding: 0.8rem 0;
+            h1 {
+                font-size: 2.2rem;
             }
             
-            .mobile-menu {
-                display: block;
-            }
-            
-            .initiatives-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .footer-content {
-                grid-template-columns: 1fr;
-            }
-            
-            .stats {
-                grid-template-columns: 1fr;
+            .day {
+                height: 60px;
             }
         }
 
-        /* Animation for stats counter */
-        .counter {
-            transition: all 0.5s ease;
+        @media (max-width: 480px) {
+            .day {
+                height: 50px;
+            }
+            
+            .day-number {
+                font-size: 1.1rem;
+            }
+            
+            .current-date {
+                font-size: 1.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="container nav-container">
-            <div class="logo">
-                <i class="fas fa-seedling"></i>
-                <span>Green Network</span>
-            </div>
-            <nav>
-                <div class="mobile-menu">
-                    <i class="fas fa-bars"></i>
-                </div>
-                <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#initiatives">Initiatives</a></li>
-                    <li><a href="#get-involved">Get Involved</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="container hero-content">
-            <h1>Protect Our Planet, Preserve Our Future</h1>
-            <p>Join the global movement to create a sustainable world through conservation, education, and community action.</p>
-            <a href="#get-involved" class="btn">Join Our Network</a>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section id="about">
-        <div class="container">
-            <div class="section-title">
-                <h2>About Green Network</h2>
-                <p>We are a global community dedicated to environmental protection and sustainable development.</p>
-            </div>
-            <div class="about-content">
-                <div class="about-img">
-                    <img src="https://images.unsplash.com/photo-1507591064344-4c6ce005b128?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80" alt="Team planting trees">
-                </div>
-                <div class="about-text">
-                    <h3>Our Mission</h3>
-                    <p>Green Network is committed to creating a sustainable future by protecting natural ecosystems, promoting renewable energy, and empowering communities to take environmental action.</p>
-                    <p>Founded in 2010, we've grown from a small grassroots organization to an international network with over 50,000 members across 120 countries.</p>
-                    <p>Our approach combines scientific research, community engagement, and policy advocacy to address the most pressing environmental challenges of our time.</p>
-                    <a href="#" class="btn">Learn More</a>
-                </div>
-            </div>
-            <div class="stats">
-                <div class="stat-item">
-                    <i class="fas fa-tree"></i>
-                    <h3 class="counter" data-target="2500000">0</h3>
-                    <p>Trees Planted</p>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-users"></i>
-                    <h3 class="counter" data-target="50000">0</h3>
-                    <p>Active Members</p>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-globe-americas"></i>
-                    <h3 class="counter" data-target="120">0</h3>
-                    <p>Countries Reached</p>
-                </div>
-                <div class="stat-item">
-                    <i class="fas fa-recycle"></i>
-                    <h3 class="counter" data-target="1500">0</h3>
-                    <p>Cleanup Projects</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Initiatives Section -->
-    <section class="initiatives" id="initiatives">
-        <div class="container">
-            <div class="section-title">
-                <h2>Our Initiatives</h2>
-                <p>Discover the key programs and projects we're implementing to protect our planet.</p>
-            </div>
-            <div class="initiatives-grid">
-                <div class="initiative-card">
-                    <div class="initiative-img">
-                        <img src="https://dialogue.earth/content/uploads/2021/04/lessons-from-the-rush-to-reforest-china-dialogue-2400x1599.jpg" alt="Reforestation">
-                    </div>
-                    <div class="initiative-content">
-                        <h3>Global Reforestation</h3>
-                        <p>Planting millions of trees worldwide to restore ecosystems, combat climate change, and protect biodiversity.</p>
-                        <a href="#" class="btn">Learn More</a>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-calendar-alt"></i> 万年历</h1>
+            <p class="subtitle">查询任意日期，掌握时间轨迹</p>
+        </header>
+        
+        <div class="main-content">
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <div class="current-date">2023年10月</div>
+                    <div class="nav-buttons">
+                        <button class="nav-btn" id="prev-year"><i class="fas fa-angle-double-left"></i></button>
+                        <button class="nav-btn" id="prev-month"><i class="fas fa-angle-left"></i></button>
+                        <button class="today-btn" id="today-btn">今天</button>
+                        <button class="nav-btn" id="next-month"><i class="fas fa-angle-right"></i></button>
+                        <button class="nav-btn" id="next-year"><i class="fas fa-angle-double-right"></i></button>
                     </div>
                 </div>
-                <div class="initiative-card">
-                    <div class="initiative-img">
-                        <img src="https://images.unsplash.com/photo-1621451537084-482c73073a0f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80" alt="Ocean Conservation">
-                    </div>
-                    <div class="initiative-content">
-                        <h3>Ocean Conservation</h3>
-                        <p>Protecting marine ecosystems, reducing plastic pollution, and promoting sustainable fishing practices.</p>
-                        <a href="#" class="btn">Learn More</a>
+                
+                <div class="weekdays">
+                    <div>周日</div>
+                    <div>周一</div>
+                    <div>周二</div>
+                    <div>周三</div>
+                    <div>周四</div>
+                    <div>周五</div>
+                    <div>周六</div>
+                </div>
+                
+                <div class="days" id="calendar-days">
+                    <!-- 日历天数将通过JavaScript动态生成 -->
+                </div>
+            </div>
+            
+            <div class="info-panel">
+                <h2 class="info-header">日期详情</h2>
+                <div class="selected-date-info">
+                    <div class="date-display" id="selected-date-display">2023年10月15日</div>
+                    <div class="date-details">
+                        <div>星期：<span class="highlight" id="selected-weekday">星期日</span></div>
+                        <div>农历：<span class="highlight" id="selected-lunar">九月初一</span></div>
+                        <div>节气：<span id="selected-solar-term">寒露</span></div>
+                        <div>生肖：<span id="selected-zodiac">兔</span></div>
+                        <div>五行：<span id="selected-element">金</span></div>
+                        <div>星座：<span id="selected-constellation">天秤座</span></div>
                     </div>
                 </div>
-                <div class="initiative-card">
-                    <div class="initiative-img">
-                        <img src="https://images.unsplash.com/photo-1508514177221-188b1cf16e9d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2072&q=80" alt="Renewable Energy">
-                    </div>
-                    <div class="initiative-content">
-                        <h3>Renewable Energy</h3>
-                        <p>Promoting solar, wind, and other clean energy sources to reduce dependence on fossil fuels.</p>
-                        <a href="#" class="btn">Learn More</a>
+                
+                <div class="holiday-list">
+                    <h3 class="info-header">本月节日</h3>
+                    <div id="holiday-list">
+                        <!-- 节日列表将通过JavaScript动态生成 -->
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-
-    <!-- CTA Section -->
-    <section class="cta" id="get-involved">
-        <div class="container">
-            <h2>Join Our Global Movement</h2>
-            <p>Together, we can create a sustainable future for generations to come. Every action counts, no matter how small.</p>
-            <a href="#" class="btn">Become a Member</a>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer id="contact">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-column">
-                    <h3>Green Network</h3>
-                    <p>We are dedicated to protecting our planet through collaborative action, education, and sustainable solutions.</p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-                <div class="footer-column">
-                    <h3>Quick Links</h3>
-                    <ul class="footer-links">
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#about">About Us</a></li>
-                        <li><a href="#initiatives">Initiatives</a></li>
-                        <li><a href="#get-involved">Get Involved</a></li>
-                        <li><a href="#contact">Contact</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Our Programs</h3>
-                    <ul class="footer-links">
-                        <li><a href="#">Reforestation</a></li>
-                        <li><a href="#">Ocean Cleanup</a></li>
-                        <li><a href="#">Wildlife Protection</a></li>
-                        <li><a href="#">Climate Education</a></li>
-                        <li><a href="#">Sustainable Agriculture</a></li>
-                    </ul>
-                </div>
-                <div class="footer-column">
-                    <h3>Contact Us</h3>
-                    <p><i class="fas fa-map-marker-alt"></i> Copper Creek Drive, New York</p>
-                    <p><i class="fas fa-phone"></i> +1 (312) 171-0771</p>
-                    <p><i class="fas fa-envelope"></i> support@greennetwork.org</p>
+        
+        <div class="controls">
+            <div class="control-group">
+                <h3 class="control-title">主题颜色</h3>
+                <div class="theme-selector">
+                    <div class="theme-option theme-blue active" data-theme="blue"></div>
+                    <div class="theme-option theme-green" data-theme="green"></div>
+                    <div class="theme-option theme-purple" data-theme="purple"></div>
+                    <div class="theme-option theme-dark" data-theme="dark"></div>
                 </div>
             </div>
-            <div class="copyright">
-                <p>&copy; 2025 Green Network. All rights reserved.</p>
+            
+            <div class="control-group">
+                <h3 class="control-title">跳转到日期</h3>
+                <div class="jump-to-date">
+                    <select id="jump-year">
+                        <!-- 年份选项将通过JavaScript动态生成 -->
+                    </select>
+                    <select id="jump-month">
+                        <option value="0">1月</option>
+                        <option value="1">2月</option>
+                        <option value="2">3月</option>
+                        <option value="3">4月</option>
+                        <option value="4">5月</option>
+                        <option value="5">6月</option>
+                        <option value="6">7月</option>
+                        <option value="7">8月</option>
+                        <option value="8">9月</option>
+                        <option value="9">10月</option>
+                        <option value="10">11月</option>
+                        <option value="11">12月</option>
+                    </select>
+                    <button id="jump-btn">跳转</button>
+                </div>
             </div>
         </div>
-    </footer>
+        
+        <footer>
+            <p>© 2023 万年历 | 本日历仅供参考，实际日期以国家公布为准</p>
+            <p>设计：前端开发 | 功能：日期查询、农历转换、节日显示</p>
+        </footer>
+    </div>
 
     <script>
-        // Mobile Menu Toggle
-        document.querySelector('.mobile-menu').addEventListener('click', function() {
-            document.querySelector('nav ul').classList.toggle('active');
-        });
-
-        // Counter Animation
-        function animateCounters() {
-            const counters = document.querySelectorAll('.counter');
-            const speed = 200; // The lower the slower
+        // 当前显示的年份和月份
+        let currentYear = new Date().getFullYear();
+        let currentMonth = new Date().getMonth();
+        let selectedDate = new Date();
+        
+        // 农历数据（简化版，实际应用中应使用完整的农历库）
+        const lunarMonths = ["正月", "二月", "三月", "四月", "五月", "六月", "七月", "八月", "九月", "十月", "冬月", "腊月"];
+        const lunarDays = ["初一", "初二", "初三", "初四", "初五", "初六", "初七", "初八", "初九", "初十", 
+                          "十一", "十二", "十三", "十四", "十五", "十六", "十七", "十八", "十九", "二十",
+                          "廿一", "廿二", "廿三", "廿四", "廿五", "廿六", "廿七", "廿八", "廿九", "三十"];
+        const zodiacs = ["鼠", "牛", "虎", "兔", "龙", "蛇", "马", "羊", "猴", "鸡", "狗", "猪"];
+        const solarTerms = ["立春", "雨水", "惊蛰", "春分", "清明", "谷雨", "立夏", "小满", "芒种", "夏至", "小暑", "大暑",
+                          "立秋", "处暑", "白露", "秋分", "寒露", "霜降", "立冬", "小雪", "大雪", "冬至", "小寒", "大寒"];
+        
+        // 节日数据（简化版）
+        const holidays = {
+            "1-1": "元旦",
+            "2-14": "情人节",
+            "3-8": "妇女节",
+            "4-1": "愚人节",
+            "5-1": "劳动节",
+            "5-4": "青年节",
+            "6-1": "儿童节",
+            "9-10": "教师节",
+            "10-1": "国庆节",
+            "12-25": "圣诞节"
+        };
+        
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            renderCalendar(currentYear, currentMonth);
+            updateDateInfo(selectedDate);
+            populateYearSelect();
+            setToday();
             
-            counters.forEach(counter => {
-                const target = +counter.getAttribute('data-target');
-                const count = +counter.innerText;
-                
-                const inc = target / speed;
-                
-                if(count < target) {
-                    counter.innerText = Math.ceil(count + inc);
-                    setTimeout(animateCounters, 1);
-                } else {
-                    counter.innerText = target;
-                }
-            });
-        }
-
-        // Initialize counters when page loads
-        window.addEventListener('load', animateCounters);
-
-        // Smooth scrolling for navigation links
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function(e) {
-                e.preventDefault();
-                
-                const targetId = this.getAttribute('href');
-                if(targetId === '#') return;
-                
-                const targetElement = document.querySelector(targetId);
-                if(targetElement) {
-                    window.scrollTo({
-                        top: targetElement.offsetTop - 80,
-                        behavior: 'smooth'
-                    });
-                    
-                    document.querySelector('nav ul').classList.remove('active');
-                }
+            // 事件监听
+            document.getElementById('prev-month').addEventListener('click', () => changeMonth(-1));
+            document.getElementById('next-month').addEventListener('click', () => changeMonth(1));
+            document.getElementById('prev-year').addEventListener('click', () => changeYear(-1));
+            document.getElementById('next-year').addEventListener('click', () => changeYear(1));
+            document.getElementById('today-btn').addEventListener('click', setToday);
+            document.getElementById('jump-btn').addEventListener('click', jumpToDate);
+            
+            // 主题切换
+            document.querySelectorAll('.theme-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.theme-option').forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    changeTheme(this.dataset.theme);
+                });
             });
         });
+        
+        // 渲染日历
+        function renderCalendar(year, month) {
+            const calendarDays = document.getElementById('calendar-days');
+            calendarDays.innerHTML = '';
+            
+            // 更新当前日期显示
+            document.querySelector('.current-date').textContent = `${year}年${month + 1}月`;
+            
+            // 获取当月第一天
+            const firstDay = new Date(year, month, 1);
+            // 获取当月最后一天
+            const lastDay = new Date(year, month + 1, 0);
+            // 获取当月天数
+            const daysInMonth = lastDay.getDate();
+            // 获取当月第一天是星期几（0-6，0代表周日）
+            const firstDayOfWeek = firstDay.getDay();
+            
+            // 添加上个月最后几天
+            const prevMonthLastDay = new Date(year, month, 0).getDate();
+            for (let i = firstDayOfWeek - 1; i >= 0; i--) {
+                const day = document.createElement('div');
+                day.className = 'day other-month';
+                day.innerHTML = `
+                    <div class="day-number">${prevMonthLastDay - i}</div>
+                    <div class="day-name">${getDayName((i - firstDayOfWeek + 7) % 7)}</div>
+                `;
+                calendarDays.appendChild(day);
+            }
+            
+            // 添加当月天数
+            const today = new Date();
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dayDate = new Date(year, month, i);
+                const dayOfWeek = dayDate.getDay();
+                const isToday = dayDate.getDate() === today.getDate() && 
+                               dayDate.getMonth() === today.getMonth() && 
+                               dayDate.getFullYear() === today.getFullYear();
+                const isHoliday = holidays[`${month + 1}-${i}`] || (dayOfWeek === 0 || dayOfWeek === 6);
+                
+                const day = document.createElement('div');
+                day.className = `day ${isToday ? 'today' : ''} ${isHoliday ? 'holiday' : ''}`;
+                day.dataset.date = dayDate.toISOString().split('T')[0];
+                day.innerHTML = `
+                    <div class="day-number">${i}</div>
+                    <div class="day-name">${getDayName(dayOfWeek)}</div>
+                    ${isHoliday && !isToday ? '<div class="holiday-indicator"></div>' : ''}
+                `;
+                
+                // 添加点击事件
+                day.addEventListener('click', () => {
+                    selectedDate = dayDate;
+                    updateDateInfo(selectedDate);
+                    document.querySelectorAll('.day').forEach(d => d.classList.remove('selected'));
+                    day.classList.add('selected');
+                });
+                
+                calendarDays.appendChild(day);
+            }
+            
+            // 添加下个月前几天
+            const nextMonthDays = 42 - (firstDayOfWeek + daysInMonth); // 确保6行完整显示
+            for (let i = 1; i <= nextMonthDays; i++) {
+                const day = document.createElement('div');
+                day.className = 'day other-month';
+                day.innerHTML = `
+                    <div class="day-number">${i}</div>
+                    <div class="day-name">${getDayName((firstDayOfWeek + daysInMonth + i - 1) % 7)}</div>
+                `;
+                calendarDays.appendChild(day);
+            }
+            
+            // 更新节日列表
+            updateHolidayList(year, month);
+        }
+        
+        // 获取星期几的名称
+        function getDayName(dayIndex) {
+            const dayNames = ["日", "一", "二", "三", "四", "五", "六"];
+            return dayNames[dayIndex];
+        }
+        
+        // 更新日期信息
+        function updateDateInfo(date) {
+            const year = date.getFullYear();
+            const month = date.getMonth() + 1;
+            const day = date.getDate();
+            const dayOfWeek = date.getDay();
+            const weekDays = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+            
+            // 更新显示日期
+            document.getElementById('selected-date-display').textContent = `${year}年${month}月${day}日`;
+            document.getElementById('selected-weekday').textContent = weekDays[dayOfWeek];
+            
+            // 计算农历（简化版）
+            const lunarMonthIndex = (month + 1) % 12;
+            const lunarDayIndex = (day - 1) % 30;
+            document.getElementById('selected-lunar').textContent = `${lunarMonths[lunarMonthIndex]}${lunarDays[lunarDayIndex]}`;
+            
+            // 计算生肖（简化版）
+            const zodiacIndex = (year - 4) % 12;
+            document.getElementById('selected-zodiac').textContent = zodiacs[zodiacIndex];
+            
+            // 随机生成五行和星座（简化版）
+            const elements = ["金", "木", "水", "火", "土"];
+            const constellations = ["白羊座", "金牛座", "双子座", "巨蟹座", "狮子座", "处女座", 
+                                  "天秤座", "天蝎座", "射手座", "摩羯座", "水瓶座", "双鱼座"];
+            
+            document.getElementById('selected-element').textContent = elements[month % 5];
+            
+            // 根据月份确定星座
+            let constellationIndex;
+            if ((month === 2 && day >= 21) || (month === 3 && day <= 19)) constellationIndex = 0; // 白羊
+            else if ((month === 3 && day >= 20) || (month === 4 && day <= 20)) constellationIndex = 1; // 金牛
+            else if ((month === 4 && day >= 21) || (month === 5 && day <= 20)) constellationIndex = 2; // 双子
+            else if ((month === 5 && day >= 21) || (month === 6 && day <= 21)) constellationIndex = 3; // 巨蟹
+            else if ((month === 6 && day >= 22) || (month === 7 && day <= 22)) constellationIndex = 4; // 狮子
+            else if ((month === 7 && day >= 23) || (month === 8 && day <= 22)) constellationIndex = 5; // 处女
+            else if ((month === 8 && day >= 23) || (month === 9 && day <= 22)) constellationIndex = 6; // 天秤
+            else if ((month === 9 && day >= 23) || (month === 10 && day <= 21)) constellationIndex = 7; // 天蝎
+            else if ((month === 10 && day >= 22) || (month === 11 && day <= 21)) constellationIndex = 8; // 射手
+            else if ((month === 11 && day >= 22) || (month === 0 && day <= 19)) constellationIndex = 9; // 摩羯
+            else if ((month === 0 && day >= 20) || (month === 1 && day <= 18)) constellationIndex = 10; // 水瓶
+            else constellationIndex = 11; // 双鱼
+            
+            document.getElementById('selected-constellation').textContent = constellations[constellationIndex];
+            
+            // 节气（简化版，根据月份随机选择一个节气）
+            const solarTermIndex = Math.floor(month * 2);
+            document.getElementById('selected-solar-term').textContent = solarTerms[solarTermIndex];
+        }
+        
+        // 更新节日列表
+        function updateHolidayList(year, month) {
+            const holidayList = document.getElementById('holiday-list');
+            holidayList.innerHTML = '';
+            
+            // 添加固定节日
+            Object.keys(holidays).forEach(key => {
+                const [holidayMonth, holidayDay] = key.split('-').map(Number);
+                if (holidayMonth === month + 1) {
+                    const holidayItem = document.createElement('div');
+                    holidayItem.className = 'holiday-item';
+                    holidayItem.innerHTML = `
+                        <span>${holidayMonth}月${holidayDay}日</span>
+                        <span>${holidays[key]}</span>
+                    `;
+                    holidayList.appendChild(holidayItem);
+                }
+            });
+            
+            // 添加周末
+            const weekendItem = document.createElement('div');
+            weekendItem.className = 'holiday-item';
+            weekendItem.innerHTML = `
+                <span>每周六、日</span>
+                <span>周末</span>
+            `;
+            holidayList.appendChild(weekendItem);
+        }
+        
+        // 改变月份
+        function changeMonth(offset) {
+            currentMonth += offset;
+            if (currentMonth < 0) {
+                currentMonth = 11;
+                currentYear--;
+            } else if (currentMonth > 11) {
+                currentMonth = 0;
+                currentYear++;
+            }
+            renderCalendar(currentYear, currentMonth);
+        }
+        
+        // 改变年份
+        function changeYear(offset) {
+            currentYear += offset;
+            renderCalendar(currentYear, currentMonth);
+        }
+        
+        // 跳转到今天
+        function setToday() {
+            const today = new Date();
+            currentYear = today.getFullYear();
+            currentMonth = today.getMonth();
+            selectedDate = today;
+            renderCalendar(currentYear, currentMonth);
+            updateDateInfo(selectedDate);
+            
+            // 更新跳转选择框
+            document.getElementById('jump-year').value = currentYear;
+            document.getElementById('jump-month').value = currentMonth;
+        }
+        
+        // 跳转到指定日期
+        function jumpToDate() {
+            const year = parseInt(document.getElementById('jump-year').value);
+            const month = parseInt(document.getElementById('jump-month').value);
+            
+            currentYear = year;
+            currentMonth = month;
+            renderCalendar(currentYear, currentMonth);
+            
+            // 默认选择当月第一天
+            selectedDate = new Date(year, month, 1);
+            updateDateInfo(selectedDate);
+        }
+        
+        // 填充年份选择框
+        function populateYearSelect() {
+            const yearSelect = document.getElementById('jump-year');
+            const currentYear = new Date().getFullYear();
+            
+            for (let i = currentYear - 100; i <= currentYear + 50; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = i + '年';
+                if (i === currentYear) option.selected = true;
+                yearSelect.appendChild(option);
+            }
+            
+            // 设置当前月份
+            document.getElementById('jump-month').value = new Date().getMonth();
+        }
+        
+        // 更改主题
+        function changeTheme(theme) {
+            const root = document.documentElement;
+            
+            switch(theme) {
+                case 'blue':
+                    root.style.setProperty('--primary-color', '#4a6fa5');
+                    root.style.setProperty('--secondary-color', '#6d9dc5');
+                    root.style.setProperty('--accent-color', '#ff7e5f');
+                    break;
+                case 'green':
+                    root.style.setProperty('--primary-color', '#2a9d8f');
+                    root.style.setProperty('--secondary-color', '#8ab17d');
+                    root.style.setProperty('--accent-color', '#e76f51');
+                    break;
+                case 'purple':
+                    root.style.setProperty('--primary-color', '#6a4c93');
+                    root.style.setProperty('--secondary-color', '#9d4edd');
+                    root.style.setProperty('--accent-color', '#ff9e00');
+                    break;
+                case 'dark':
+                    root.style.setProperty('--primary-color', '#343a40');
+                    root.style.setProperty('--secondary-color', '#495057');
+                    root.style.setProperty('--accent-color', '#ff6b6b');
+                    root.style.setProperty('--light-color', '#212529');
+                    root.style.setProperty('--text-color', '#f8f9fa');
+                    root.style.setProperty('--border-color', '#495057');
+                    document.body.style.backgroundColor = '#121212';
+                    break;
+            }
+        }
     </script>
 </body>
-
 </html>
